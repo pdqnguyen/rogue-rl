@@ -1,0 +1,71 @@
+agent:
+  epsilon_range:
+    - 0.1
+    - 1.0
+  nb_steps: 300000
+  nb_steps_warmup: 1000
+  action_repetition: 1
+  nb_max_episode_steps: 1000
+  checkpt_interval: 10000
+  log_interval: 10000
+  outdir: "output-v2-agent1"
+  model:
+    - name: Conv3D
+      kwargs:
+        filters: 16
+        kernel_size: 4
+        strides: 4
+        activation: relu
+        padding: same
+    - name: BatchNormalization
+    - name: MaxPooling3D
+      kwargs:
+        pool_size: 2
+        padding: same
+    - name: Flatten
+    - name: Dense
+      kwargs:
+        units: 512
+        activation: relu
+
+
+game:
+  screen:
+    size:
+      - 1920
+      - 1080
+  state:
+    size:
+      - 60
+      - 40
+  video:
+    size:
+      - 60
+      - 40
+  zoom: 10
+  world:
+    size:
+      - 60
+      - 40
+    color:
+      - 50
+      - 50
+      - 50
+    min_area_factor: 0.8
+    min_segment_dim_factor: 0.2
+    max_segment_dim_factor: 0.7
+    min_segment_area_factor: 0.1
+    max_segment_area_factor: 0.2
+  goal:
+    size: 3
+    color:
+      - 0
+      - 255
+      - 0
+  character:
+    size: 1
+    num_enemies: 1
+    enemy_color:
+      - 255
+      - 0
+      - 0
