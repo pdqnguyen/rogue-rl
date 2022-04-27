@@ -325,10 +325,11 @@ class RogueLike(gym.Env):
         self.state = self.render("state_pixels")
         step_reward = 0
         done = False
+        reward_dict = self.config["reward"]
         if action is not None:
             i, j = self._get_state_coords(self.player.position)
             if self.state[i, j, 3]:
-                self.reward += 1000.0 / self.world.area
+                self.reward += reward_dict["explore"]
             if (
                     self.player.previous != self.player.position and
                     self.player.previous not in self.player.tiles_visited
@@ -336,18 +337,18 @@ class RogueLike(gym.Env):
                 self.player.tiles_visited.append(self.player.previous)
             if len(self.player.tiles_visited) == self.world.area:
                 done = True
-            self.reward -= 0.1
-            step_reward = self.reward - self.prev_reward
-            self.prev_reward = self.reward
+            self.reward -= reward_dict["step"]
             for col in collisions:
                 if col == "goal":
                     done = True
-                    step_reward = 100
+                    self.reward = reward_dict["win"]
                     break
                 elif col == "enemy":
                     done = True
-                    step_reward = -100
+                    self.reward = reward_dict["lose"]
                     break
+            step_reward = self.reward - self.prev_reward
+            self.prev_reward = self.reward
         return self.state, step_reward, done, {}
 
     def render(self, mode="human", save_video=False):

@@ -1,32 +1,43 @@
 agent:
-  epsilon_range:
-    - 0.1
-    - 1.0
-  nb_steps: 300000
-  nb_steps_warmup: 1000
-  action_repetition: 1
-  nb_max_episode_steps: 1000
-  checkpt_interval: 10000
-  log_interval: 10000
-  outdir: "output-v2-agent1"
+  policy:
+    eps_max: 1.0
+    eps_min: 0.1
+    eps_test: 0.3
+  nb_steps: 100000
+  nb_steps_warmup: 1
+  nb_max_episode_steps: 200
+  nb_max_test_episode_steps: 100
+  action_repetition: 3
+  target_model_update: 1.0e-2
+  gamma: 0.9
+  chkpt_interval: 10000
+  log_interval: 10
+  outdir: "E:/Projects/rogue-rl/output/v5/agent1/run1/"
+  train_from_weights:
   model:
-    - name: Conv3D
-      kwargs:
-        filters: 16
-        kernel_size: 4
-        strides: 4
-        activation: relu
-        padding: same
-    - name: BatchNormalization
-    - name: MaxPooling3D
-      kwargs:
-        pool_size: 2
-        padding: same
-    - name: Flatten
-    - name: Dense
-      kwargs:
-        units: 512
-        activation: relu
+    learning_rate: 1.0e-4
+    metrics:
+      - mae
+    layers:
+      - name: Conv2D
+        kwargs:
+          filters: 32
+          kernel_size: 8
+          strides: 4
+          activation: relu
+      - name: BatchNormalization
+      - name: Conv2D
+        kwargs:
+          filters: 32
+          kernel_size: 4
+          strides: 2
+          activation: relu
+      - name: BatchNormalization
+      - name: Flatten
+      - name: Dense
+        kwargs:
+          units: 512
+          activation: relu
 
 
 game:
@@ -64,8 +75,13 @@ game:
       - 0
   character:
     size: 1
-    num_enemies: 1
+    num_enemies: 5
     enemy_color:
       - 255
       - 0
       - 0
+  reward:
+    step: 0  # 0.1
+    explore: 0  # 1000 / (60 * 40)
+    win: 1
+    lose: -1
