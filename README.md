@@ -8,4 +8,4 @@ requiring that the agent learn to explore and move towards its goal while recogn
 ### Example
 Agent trained to reach a goal while avoiding static enemies.
 
-https://user-images.githubusercontent.com/27107761/148708935-a45d6862-d62a-42d5-b23b-58c635eab734.mp4
+https://user-images.githubusercontent.com/27107761/165588804-86aeb992-0b88-4a28-8123-1aeaf9606959.mov
